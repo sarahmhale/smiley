@@ -12,4 +12,7 @@ class Layer:
         outputs = []
         for neuron in self.neurons:
             outputs.append(neuron.calculateOutput(inputs))
+        #print ""
+        #print "the outputs of feedForward: ", outputs
+        #print ""
         return outputs

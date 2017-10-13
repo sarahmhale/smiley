@@ -28,16 +28,14 @@ def loadData(face_file):
         faces = open( face_file, 'r' )
         content =  faces.readline()
         while content:
-            if(content.startswith('#')):
-                content = faces.readline()
-            elif(content.startswith('I')):
+            if(content.startswith('I')):
                 key = content.strip()
                 grid = []
                 content = faces.readline()
                 while(content != "\n"):
                     grid+= content.split()
                     content = faces.readline()
-                out.append({"key": key, "grid": list(map(int, grid))
+                out.append({"key": key, "grid": [float(x)/32 for x in grid]
 , "emotion": 100})
             else:
                 content = faces.readline()
@@ -47,7 +45,8 @@ def loadData(face_file):
 if __name__ == "__main__":
     X = loadData(sys.argv[1])
     X = loadFacit(sys.argv[2],X)
-    ANN = Network(400,200,4)
-
+    ANN = Network(400,4)
     #ANN.printStructure()
-    ANN.train(X)
+    ANN.train(X[:int(len(X)*0.7)])
+    #ANN.train([0,1])
+    #ANN.test()
