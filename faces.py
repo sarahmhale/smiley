@@ -54,12 +54,8 @@ if __name__ == "__main__":
 
     network = Network(4)
 
-    training_set = X[: int(len(X)*0.7)]
-    test_set = X[int(len(X)*0.7):]
+    training_images = X[: int(len(X)*0.7)]
+    test_images = X[int(len(X)*0.7):]
 
-    network.train(training_set,test_set)
-    network.testAndPrint(test_file)
-
-
-
-    #print "number of right answers are", float(counter)/len(test_set)*100, "%"
+    network.train(training_images,test_images)
+    network.testAndPrintAnswers(test_file)
