@@ -1,62 +1,44 @@
-from Layer import Layer
-from random import random
+from Neuron import Neuron
+import numpy as np
+
 class Network:
-    def __init__(self, num_inputs, num_outputs):
-        self.num_inputs = num_inputs
+    def __init__(self,numberOfNeurons):
+        self.neurons = []
+        for i in range(numberOfNeurons):
+            self.neurons.append(Neuron(np.random.rand(1,400)/1000))
 
-        self.output_layer = Layer(num_outputs)
+    def feedForward(self, training_set):
+        for face in training_set:
+            i = 0
+            for neuron in self.neurons:
+                neuron.feedForward(face['grid'])
+                neuron.updateWeights(face['emotion'][i])
+                i = i +1
 
-        self.weight_output_layer = self.init_weights(num_inputs, self.output_layer)
+    def testAndPrint(self, test_set):
+        for face in test_set:
+            y = []
+            for neuron in self.neurons:
+                y.append(neuron.feedForward(face['grid']))
+            print "mood: ", y.index(max(y))+1
 
-    def init_weights(self,num_of_neurons_layer_above, layer):
-        for h in range(len(layer.neurons)):
-            for i in range(num_of_neurons_layer_above):
-                layer.neurons[h].weights.append(random())
-        return layer
+    def compareToFacit(self,facit, y,counter):
+        if(y.index(max(y)) == facit.index(max(facit))):
+            return counter + 1
+        return counter
 
-    def feedForward(self,inputs):
-        return self.output_layer.feedForward(inputs)
+    def test(self, test_set):
+        counter = 0
+        for face in test_set:
+            y= []
+            for neuron in self.neurons:
+                y.append(neuron.feedForward(face['grid']))
+            counter = self.compareToFacit(face['emotion'], y, counter)
+        return counter
 
-    def printStructure(self):
-
-
-        print ""
-        print "Output layer: "
-        for neuron in self.output_layer.neurons:
-            print "weight: ",neuron.weights
-            print "bias: ",neuron.bias
-        print ""
-        for neuron in self.output_layer.neurons:
-            print "output: " , neuron.output
-            print "delta: " , neuron.delta
-
-        print ""
-        #print "number of inputs neurons: ", self.num_inputs
-        #print "number of hidden neurons: ", len(self.hidden_layer.neurons)
-        #print "number of output neurons: ", len(self.output_layer.neurons)
-
-
-    def updateFreeParameters(self):
-        for neuron in self.output_layer.neurons:
-            neuron.updateFreeParameters()
-
-    def calculateError(self, facit):
-        #output_layer
-        i = 0
-        error = []
-        for neuron in self.output_layer.neurons:
-            error.append(neuron.output_layer_error(facit[i]))
-            i = i+1
-
-        print "Error:" ,error
-
-
-    def train(self,traning_set):
-        for i in range(0,100,1):
-            for face in traning_set:
-                self.feedForward(traning_set[i]['grid'])
-                self.calculateError(traning_set[i]['emotion'])
-                self.updateFreeParameters()
-
-
-        self.feedForward(traning_set[0]['grid'])
+    def train(self, training_set, test_set):
+        counter = 0
+        while(float(counter)/len(test_set)<0.7):
+            np.random.shuffle(training_set)
+            self.feedForward(training_set)
+            counter = self.test(test_set)
