@@ -46,7 +46,7 @@ class Network:
             neuronOutputs = []
             for neuron in self.neurons:
                 neuronOutputs.append(neuron.feedForward(image['grid']))
-            print "mood: ", neuronOutputs.index(max(neuronOutputs))+1
+            print image['key'], neuronOutputs.index(max(neuronOutputs))+1
 
     """
     Purpose:    compares the index of highest value in neuronOutputs and the
@@ -84,7 +84,7 @@ class Network:
     Purpose:    Runs through the training data. training_images are used to
                 train and update weights and the test_images are for checking if
                 the network is good enough.
-                
+
     Input:      training_images:
                 [{'key': "image1", 'grid':[0,32,20.....],'emotion': [0,1,0,0] },
                 {'key': "image2", 'grid':[1,16,20.....],'emotion': [1,0,0,0] }]

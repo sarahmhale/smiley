@@ -32,7 +32,7 @@ class Neuron:
         return self.output
 
     """
-    Purpose:    Sums all of the inputs multipled by the corresponding weight.
+    Purpose:    Sums all of the inputs multiplied by the corresponding weight.
     Input:      [0,0.1,0.2 .....]
     Output:     a double
     """
@@ -51,7 +51,7 @@ class Neuron:
             self.weights[i] = self.weights[i]+ (self.learningRate * self.error * self.inputs[i])
             i=i+1
     """
-    Purpose:    calculates the difference between the target_output and the
+    Purpose:    Calculates the difference between the target_output and the
                 neurons output.
     Input:      a int
     comment:    For the network to work the input int should be either 0 or 1.
